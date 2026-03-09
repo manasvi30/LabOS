@@ -791,14 +791,43 @@ The project repository is at: {repo_dir}
 
 IMPORTANT: Work inside {repo_dir}. Use existing project structure.
 """
-    escaped_prompt = codex_prompt.replace("'", "'\\'\''")
+    # ---- Write prompt to remote temp file to avoid shell escaping issues ----
+    # Using SFTP to write directly — no shell escaping needed at all
+    try:
+        cfg = get_ssh_config()
+        sftp_client = paramiko.SSHClient()
+        sftp_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, lambda: sftp_client.connect(
+            hostname=cfg["host"], port=cfg["port"],
+            username=cfg["user"], password=cfg["password"], timeout=30,
+        ))
+        sftp = sftp_client.open_sftp()
+        with sftp.file("/tmp/labos_codex_prompt.txt", "w") as f:
+            f.write(codex_prompt)
+        sftp.close()
+        sftp_client.close()
+        log_fn("experiment", f"[Codex] ✅ Prompt 已通过 SFTP 写入远程 /tmp/labos_codex_prompt.txt ({len(codex_prompt)} 字符)")
+    except Exception as e:
+        log_fn("experiment", f"[Codex] ⚠ SFTP 写入失败: {e}，尝试 base64 方法", "WARN")
+        import base64 as _b64
+        prompt_b64 = _b64.b64encode(codex_prompt.encode("utf-8")).decode("ascii")
+        # Split into chunks to avoid shell line length limits
+        chunk_size = 4000
+        chunks = [prompt_b64[i:i+chunk_size] for i in range(0, len(prompt_b64), chunk_size)]
+        await ssh_execute(f"echo -n '' > /tmp/labos_codex_prompt_b64.txt", project_id, experiment_id)
+        for chunk in chunks:
+            await ssh_execute(f"echo -n '{chunk}' >> /tmp/labos_codex_prompt_b64.txt", project_id, experiment_id)
+        await ssh_execute("base64 -d /tmp/labos_codex_prompt_b64.txt > /tmp/labos_codex_prompt.txt", project_id, experiment_id)
+        log_fn("experiment", f"[Codex] ✅ Prompt 已通过 base64 写入 ({len(codex_prompt)} 字符, {len(chunks)} 块)")
+
     codex_command = (
-        f"cd {repo_dir} && {codex_path} exec --full-auto --json "
-        f"--sandbox workspace-write "
+        f"cd {repo_dir} && cat /tmp/labos_codex_prompt.txt | {codex_path} exec --full-auto --json "
+        f"--skip-git-repo-check "
         f"-o /tmp/labos_experiment_result.txt "
-        f"'{escaped_prompt}'"
+        f"- 2>&1"
     )
-    log_fn("experiment", "[Codex] 🚀 启动 Codex CLI (full-auto)...")
+    log_fn("experiment", f"[Codex] 🚀 启动 Codex CLI (full-auto)... prompt长度={len(codex_prompt)}")
 
     # Use streaming SSH that parses JSONL events in real-time
     result = await ssh_execute_codex_streaming(
@@ -2177,6 +2206,10 @@ async def ssh_execute_codex_streaming(
 
         total_output = "\n".join(output_lines)
         log_fn("experiment", f"[Codex] 🏁 Codex CLI 执行完成 (exit={exit_code}, 共 {len(codex_events)} 个事件, {round_counter} 个回合)")
+        if exit_code != 0 and err_text:
+            log_fn("experiment", f"[Codex] ⚠ STDERR: {err_text[:1000]}", "WARN")
+        if exit_code != 0 and not codex_events:
+            log_fn("experiment", f"[Codex] ⚠ 无JSONL事件输出，原始stdout: {total_output[:500]}", "WARN")
 
         return {
             "output": total_output,

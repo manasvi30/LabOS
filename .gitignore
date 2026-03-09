@@ -43,3 +43,6 @@ tool_calls/
 cron_tracking/
 __pycache__/
 assets/
+
+# Debug artifacts
+_debug_*.txt
