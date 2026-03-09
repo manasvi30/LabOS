@@ -12,9 +12,9 @@
 
 ## 演示视频
 
-https://github.com/user-attachments/assets/labos-demo-zh.mp4
+[🎬 **点击观看 LabOS 演示视频（4分钟中文讲解）**](https://github.com/YUANXICHE98/LabOS/releases/download/v3.4.1/labos-demo-zh.mp4)
 
-> 👆 如果视频无法播放，请查看 [docs/videos/labos-demo-zh.mp4](./docs/videos/labos-demo-zh.mp4)
+> 也可以在 [Releases 页面](https://github.com/YUANXICHE98/LabOS/releases/tag/v3.4.1) 直接下载观看
 
 ## LabOS 截图
 
