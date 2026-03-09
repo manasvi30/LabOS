@@ -1,272 +1,172 @@
-<p align="center">
-  <h1 align="center">🔬 LabOS</h1>
-  <p align="center"><b>Fully Automated Research System — 全自动科研实验平台</b></p>
-  <p align="center">
-    <a href="#features">Features</a> •
-    <a href="#screenshots">Screenshots</a> •
-    <a href="#quick-start">Quick Start</a> •
-    <a href="#architecture">Architecture</a> •
-    <a href="#open-core-model">Open Core</a> •
-    <a href="#contributing">Contributing</a> •
-    <a href="#support">Support</a>
-  </p>
-  <p align="center">
-    <img src="https://img.shields.io/badge/license-AGPL--3.0-blue.svg" alt="License">
-    <img src="https://img.shields.io/badge/python-3.10+-green.svg" alt="Python">
-    <img src="https://img.shields.io/badge/status-active%20development-orange.svg" alt="Status">
-  </p>
-</p>
+# LabOS
 
----
+下一代全自动科研实验平台，覆盖完整研究生命周期：创意生成、文献调研、假设设计、实验执行、论文撰写。本地优先、多模型支持、完全开源。
 
-## What is LabOS?
+[English version README.md](./README.en.md)
 
-**LabOS** is an open-source, self-hosted platform for **fully automated research experiments**. It manages the entire research lifecycle — from idea generation and literature review, through hypothesis design and experiment execution, to final paper writing — with minimal human intervention.
+### ✦ 核心能力
 
-**LabOS** 是一个开源的、可自部署的**全自动科研实验平台**。它管理完整的研究生命周期：从创意生成、文献调研，到假设设计、实验执行，再到论文撰写，全程最少人工干预。
+> **研究流水线** · 四阶段自动化 &nbsp;│&nbsp; **AI 对话** · 多模型流式对话 &nbsp;│&nbsp; **实验执行** · SSH 远程 GPU 服务器 &nbsp;│&nbsp; **Codex 集成** · AI 自动写实验代码
+>
+> **记忆系统** · 跨实验知识持久化 &nbsp;│&nbsp; **多模型配置** · 通用 / 代码 / 论文 / 实验 独立配置 &nbsp;│&nbsp; **阶段报告** · 调研报告→分析报告→实验报告 &nbsp;│&nbsp; **本地优先** · 数据全在你手里
 
-### Why LabOS?
+## 演示视频
 
-| Pain Point | LabOS Solution |
-|---|---|
-| 手动跑实验、反复调参 | 自动化流水线，连接远程 GPU 服务器，全自动执行 |
-| 实验结果散落各处 | 统一 Dashboard，实验日志 + 报告 + 记忆系统 |
-| 想法到验证周期太长 | 对话即创建项目，AI 辅助快速迭代 |
-| 代码实现门槛高 | 集成 Codex CLI，AI 自动写实验代码 |
+https://github.com/user-attachments/assets/labos-demo-zh.mp4
 
----
+> 👆 如果视频无法播放，请查看 [docs/videos/labos-demo-zh.mp4](./docs/videos/labos-demo-zh.mp4)
 
-## Screenshots
+## LabOS 截图
 
-### Project Management | 项目管理
-![Projects](docs/screenshot-projects.jpg)
+### 项目管理
+LabOS 的项目视图，支持多项目管理，每个项目关联独立的实验、记忆和论文库。
 
-### Experiment Pipeline | 实验流水线
-![Experiment Detail](docs/screenshot-experiment.jpg)
+![LabOS Projects](docs/screenshots/screenshot-projects.jpg)
 
-### Dashboard | 概览面板
-![Dashboard](docs/screenshot-dashboard.png)
+### 实验流水线
+实验详情视图，展示四阶段流水线的运行状态、阶段审批、实验日志。支持人工审批 / 修改重跑 / 拒绝终止。
 
----
+![LabOS Experiment](docs/screenshots/screenshot-experiment.jpg)
 
-## Features
+### 概览面板
+Dashboard 视图，快速了解项目概况，一键导航到对话、项目或新建实验。
 
-### 🧪 Four-Stage Research Pipeline
-```
-创意生成 (Ideation) → 方案设计 (Planning) → 实验执行 (Experiment) → 论文撰写 (Writing)
-```
-Each stage produces reports and supports human review / approval gates.
+![LabOS Dashboard](docs/screenshots/screenshot-dashboard.png)
 
-每个阶段都会生成报告（调研报告 → 分析报告 → 实验报告 → 论文），并支持人工审批。
+## 特性
 
-### 💬 Chat-Driven Interface | 对话驱动
-- Conversational AI assistant for research brainstorming
-- Create projects directly from chat conversations
-- Multiple LLM profiles: general / code / paper / experiment
-- Configurable LLM backends (bring your own API key & endpoint)
+- **四阶段研究流水线** — 创意生成 → 方案设计 → 实验执行 → 论文撰写，每阶段生成独立报告
+- **对话驱动** — AI 助手流式对话，支持从对话直接创建项目
+- **多 LLM 配置档** — 为通用对话、代码分析、论文撰写、实验设计分别配置不同模型和 API
+- **远程实验执行** — SSH 连接 GPU 服务器（AutoDL 等），实时日志流推送
+- **Codex CLI 集成** — full-auto 模式，JSONL 实时流式输出，自动写实验代码
+- **记忆系统** — 跨实验知识持久化，项目级记忆检索
+- **阶段审批** — 每个流水线阶段支持：批准 → 下一阶段 / 修改重跑 / 拒绝终止
+- **完全可配置** — 所有设置通过 Web UI 暴露，支持任意 OpenAI 兼容 API
+- **本地优先** — SQLite 存储，所有数据在你本地
 
-### 🖥️ Remote Experiment Execution | 远程实验执行
-- SSH into GPU servers (AutoDL, etc.) for experiment runs
-- Real-time log streaming via SSE (Server-Sent Events)
-- Codex CLI integration with full-auto mode and JSONL streaming
-- Live experiment monitoring from the web dashboard
-
-### 📊 Unified Dashboard | 统一管理
-- Project management with experiment tracking
-- Memory system for cross-experiment knowledge persistence
-- Paper & findings library
-- Per-stage reports (research → analysis → experiment → paper)
-
-### ⚙️ Fully Configurable | 完全可配置
-- Multiple LLM configurations (different models for different tasks)
-- Custom API endpoints (OpenAI-compatible)
-- SSH server settings
-- Embedding model configuration
-- All settings exposed via web UI — no code changes needed
-
----
-
-## Quick Start
-
-### Prerequisites
-- Python 3.10+
-
-### Run
+## 快速开始
 
 ```bash
 git clone https://github.com/YUANXICHE98/LabOS.git
 cd LabOS
-pip install fastapi uvicorn paramiko httpx
-python api_server.py
+bash start.sh
 ```
 
-Open `http://localhost:8000` in your browser.
+或手动启动：
 
-### First Steps
-1. Go to **Settings** → configure your LLM API endpoint and key
-2. (Optional) Configure SSH for remote experiment execution
-3. Go to **Chat** → start a conversation → create a project from chat
-4. Or go to **Projects** → create a project manually → run experiments
-
----
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────┐
-│                  Frontend                    │
-│         HTML + CSS + Vanilla JS             │
-│    Dashboard / Projects / Chat / Settings    │
-└──────────────────┬──────────────────────────┘
-                   │ REST + SSE
-┌──────────────────▼──────────────────────────┐
-│              FastAPI Backend                  │
-│                                              │
-│  ┌──────────┐ ┌──────────┐ ┌──────────────┐ │
-│  │ Pipeline │ │ Chat API │ │ Experiment   │ │
-│  │ Engine   │ │ (Stream) │ │ Runner (SSH) │ │
-│  └──────────┘ └──────────┘ └──────────────┘ │
-│  ┌──────────┐ ┌──────────┐ ┌──────────────┐ │
-│  │ Memory   │ │ LLM      │ │ Codex CLI    │ │
-│  │ System   │ │ Profiles │ │ Integration  │ │
-│  └──────────┘ └──────────┘ └──────────────┘ │
-└──────────────────┬──────────────────────────┘
-                   │
-        ┌──────────┼──────────┐
-        ▼          ▼          ▼
-   SQLite DB   LLM APIs   GPU Servers
-              (configurable)  (via SSH)
+```bash
+pip install -r requirements.txt
+cd src && python api_server.py
 ```
 
----
+打开浏览器访问 `http://localhost:8000`
 
-## Open Core Model | 开源核心 + 付费增值
+### 首次配置
 
-LabOS follows an **Open Core** model:
+1. 进入 **设置** → 配置你的 LLM API 端点和密钥（支持任意 OpenAI 兼容 API）
+2. （可选）配置 SSH 服务器信息，用于远程实验执行
+3. 进入 **对话** → 开始聊天 → 从对话创建项目
+4. 或进入 **项目** → 手动创建项目 → 启动实验
 
-### 🆓 Free & Open Source (this repo)
-Everything in this repository is free under AGPL-3.0:
-- Full research pipeline (ideation → planning → experiment → writing)
-- Chat-driven interface
-- Multi-project management
-- LLM configuration & profiles
-- Dashboard & memory system
-- Basic experiment execution
+### 多 LLM 配置
 
-### 💎 Premium (coming soon)
-- **Skill Library** — Curated research methodologies, proven experiment paths, and best practices from real research projects. Think of it as a marketplace for "what worked" in different research domains.
-- **Advanced Integrations** — Pre-built connectors for cloud GPU platforms, HPC clusters, and specialized hardware
-- **Priority Support** — Direct access to the development team
+LabOS 支持为不同任务类型配置独立的 LLM：
 
-> **Philosophy:** The platform itself will always be open. We believe the real value is in **curated knowledge and methodology** — the proven research paths and techniques that save weeks of trial and error. This is what the premium tier offers.
+| 任务类型 | 用途 | 推荐模型 |
+|---------|------|---------|
+| 通用对话 | 日常研究讨论 | DeepSeek-Chat / GPT-4o |
+| 代码分析 | 代码审查、实验代码生成 | DeepSeek-Coder / Claude |
+| 论文分析 | 文献综述、论文撰写 | GPT-4o / Claude |
+| 实验设计 | 假设生成、实验方案 | DeepSeek-Chat / Claude |
 
-> **理念：** 平台本身永远开源。真正的价值在于**经过验证的研究方法论和最佳实践**——那些节省数周试错时间的成熟路径。这是付费增值的核心。
+通过 **设置 > LLM 配置档** 配置，每个任务类型可以设置独立的 Base URL + API Key + 模型名。
 
----
+## 项目结构
 
-## Contributing
+```
+LabOS/
+├── src/
+│   ├── api_server.py      # FastAPI 后端 — 所有 API 端点和流水线逻辑
+│   ├── index.html          # 主页面（单页应用）
+│   ├── app.js              # 前端 — UI 逻辑、API 调用、SSE 实时流
+│   └── style.css           # 样式
+├── docs/
+│   ├── screenshots/        # 截图
+│   └── videos/             # 演示视频
+├── start.sh                # 一键启动脚本
+├── requirements.txt        # Python 依赖
+├── CONTRIBUTING.md         # 贡献指南
+├── GOVERNANCE.md           # 贡献者治理与激励制度
+└── LICENSE                 # AGPL-3.0
+```
 
-We welcome contributions! LabOS is in active development and there's plenty to work on.
+## 技术栈
 
-See **[CONTRIBUTING.md](./CONTRIBUTING.md)** for development setup and guidelines.
+- **后端** — Python / FastAPI / uvicorn
+- **数据库** — SQLite（零配置，本地文件）
+- **前端** — 原生 HTML + CSS + JavaScript（无构建步骤）
+- **远程执行** — Paramiko（SSH）
+- **LLM 调用** — httpx（OpenAI 兼容协议）
+- **实时通信** — Server-Sent Events (SSE)
 
-### Areas We Need Help With
-- 🧠 **Memory System** — better retrieval, knowledge graph integration
-- 🔬 **Pipeline** — more experiment templates, domain-specific stages
-- 📝 **Paper Writing** — LaTeX generation, citation management
-- 🌐 **Frontend** — UI/UX improvements, visualization
-- 🔌 **Integrations** — more LLM providers, cloud GPU platforms
-- 📖 **Documentation** — tutorials, examples, translations
-- 🌍 **i18n** — multi-language UI support
+## Open Core 模式
 
-Browse [open issues](https://github.com/YUANXICHE98/LabOS/issues) for specific tasks — many are tagged `good first issue`.
+LabOS 采用 **开源核心 + 付费增值** 模式：
 
----
+### 🆓 免费开源（本仓库）
+本仓库所有代码永久免费开源：完整研究流水线、对话、项目管理、LLM 配置、记忆系统、实验执行。
 
-## Roadmap
+### 💎 付费增值（即将推出）
+- **Skill Library** — 经过验证的研究方法论、实验路径、最佳实践。可以理解为"哪条路走得通"的知识库
+- **高级集成** — 更多云 GPU 平台、HPC 集群的预置连接器
+- **优先支持** — 直接对接开发团队
 
-- [x] Multi-project management
-- [x] Chat-to-project creation
-- [x] Codex CLI real-time streaming
-- [x] Multiple LLM profile configuration
-- [x] SSH remote experiment execution
-- [ ] arXiv paper search integration
-- [ ] Experiment result visualization (charts & plots)
-- [ ] Multi-user support
-- [ ] Docker deployment
-- [ ] Plugin system for custom pipeline stages
-- [ ] Knowledge graph memory backend
-- [ ] Skill library & marketplace
+> 平台本身永远开源。真正的价值在于**经过验证的研究方法论**——节省数周试错时间的成熟路径。
 
----
+## 贡献者激励
 
-## Contributor Incentives | 贡献者激励
+我们重视每一份贡献。详见 **[GOVERNANCE.md](./GOVERNANCE.md)**
 
-We believe in rewarding contributions. See **[GOVERNANCE.md](./GOVERNANCE.md)** for the full program.
-
-| Level | What You Get |
-|-------|-------------|
-| **First PR merged** | Name in Contributors Wall, contributor badge |
-| **3+ PRs merged** | Free Skill Library access (when launched), early beta access |
-| **10+ PRs or 1 major feature** | Core Contributor role, **30% revenue share** on Skills you contribute, co-authorship on papers |
-| **Bounty issues** | Cash rewards (crypto/Sponsors) for selected high-priority tasks |
-
-All contribution types count equally: code, docs, translations, bug reports, research methodologies, and design.
+| 等级 | 条件 | 激励 |
+|------|------|------|
+| 贡献者 | 1 个 PR 合并 | Contributors Wall 署名 |
+| 活跃贡献者 | 3+ PR | 免费 Skill Library 访问 + Beta 早期体验 |
+| 核心贡献者 | 10+ PR 或 1 个大功能 | **30% 收益分成** + 论文共同作者 |
+| 悬赏任务 | `💰 bounty` 标签 | 加密货币 / Sponsors 现金奖励 |
 
 代码不是唯一的贡献方式——文档、翻译、Bug 报告、研究方法论、设计都同等计算。
 
----
+欢迎 PR！详见 [CONTRIBUTING.md](./CONTRIBUTING.md)，浏览 [Issues](https://github.com/YUANXICHE98/LabOS/issues) 找到你感兴趣的任务。
 
-## Support the Project | 支持项目
+## 支持项目
 
-If LabOS helps your research, consider supporting its development:
+- ⭐ **Star 本仓库** — 帮助更多人发现 LabOS
+- 🍴 **Fork & 贡献** — 代码、文档、翻译
+- 💰 **赞助** — 帮助持续开发
 
-- ⭐ **Star this repo** — it helps others discover LabOS
-- 🍴 **Fork & contribute** — code, docs, or translations
-- 💰 **Sponsor** — help sustain development
+### 加密货币
 
-### Crypto | 加密货币
+| 链 | 地址 |
+|----|------|
+| **ETH / ERC-20** (USDT, USDC 等) | `0xc6B4720835E6C3CB58618B4df26B64F595C30202` |
 
-| Chain | Address |
-|-------|---------|
-| **ETH / ERC-20** (USDT, USDC, etc.) | `0xc6B4720835E6C3CB58618B4df26B64F595C30202` |
+### 微信 / 支付宝
 
-### WeChat / Alipay | 微信 / 支付宝
-
-*Coming soon — 即将添加收款码*
+*即将添加收款码*
 
 ### GitHub Sponsors
 
-Click the **"Sponsor"** button at the top of this repo to support via GitHub Sponsors.
-
-通过仓库顶部的 "Sponsor" 按钮支持本项目。
+点击仓库顶部的 **「Sponsor」** 按钮支持本项目。
 
 ---
 
-## Contributors | 贡献者
+## Contributors
 
-<!-- Contributors wall - auto-updated -->
 <a href="https://github.com/YUANXICHE98/LabOS/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=YUANXICHE98/LabOS" />
 </a>
 
----
+## 开源许可
 
-## License
-
-**GNU Affero General Public License v3.0 (AGPL-3.0)**
-
-- ✅ Free to use, modify, and distribute
-- ✅ Commercial use allowed
-- ⚠️ Modified versions **must** be open-sourced under AGPL-3.0
-- ⚠️ Network services using modified code **must** provide source to users
-- ⚠️ All derivative works must reference this upstream repository
-
-See [LICENSE](./LICENSE) for the full text.
-
----
-
-<p align="center">
-  <b>Built for researchers, by researchers.</b><br>
-  为科研人打造的自动化实验平台。
-</p>
+[AGPL-3.0](./LICENSE) — 修改后必须开源，网络服务必须提供源码，衍生作品须引用上游仓库。

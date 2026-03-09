@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<!--
+   ______                            __
+  / ____/___  ____ ___  ____  __  __/ /____  _____
+ / /   / __ \/ __ `__ \/ __ \/ / / / __/ _ \/ ___/
+/ /___/ /_/ / / / / / / /_/ / /_/ / /_/  __/ /
+\____/\____/_/ /_/ /_/ .___/\__,_/\__/\___/_/
+                    /_/
+        Created with Perplexity Computer
+        https://www.perplexity.ai/computer
+-->
+<meta name="generator" content="Perplexity Computer">
+<meta name="author" content="Perplexity Computer">
+<meta property="og:see_also" content="https://www.perplexity.ai/computer">
+<link rel="author" href="https://www.perplexity.ai/computer">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LabOS v3.4 — 交互式科研自动化平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div id="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-wrap">
+<svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="LabOS Logo">
+  <path d="M11 4h10v8l5 12a2 2 0 01-1.85 2.76H7.85A2 2 0 016 24.76L11 12V4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M11 4h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="14" cy="20" r="2" fill="var(--color-primary)" opacity="0.7"/>
+  <circle cx="20" cy="18" r="1.5" fill="var(--color-primary)" opacity="0.5"/>
+  <circle cx="16" cy="24" r="1" fill="var(--color-primary)" opacity="0.4"/>
+  <path d="M8 14h16" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2" opacity="0.4"/>
+</svg>
+        <div class="logo-text">
+          <span class="logo-title">LabOS</span>
+          <span class="logo-sub">v3.4</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-view="dashboard" onclick="switchView('dashboard')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        <span>概览</span>
+      </button>
+      <button class="nav-item" data-view="chat" onclick="switchView('chat')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        <span>对话</span>
+      </button>
+      <button class="nav-item" data-view="projects" onclick="switchView('projects')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+        <span>项目</span>
+      </button>
+      <button class="nav-item" data-view="settings" onclick="switchView('settings')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.32 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        <span>设置</span>
+      </button>
+      <button class="nav-item" data-view="terminal" onclick="openSSHPanel()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        <span>终端</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="status-dot" id="status-dot"></div>
+      <span class="status-text" id="status-text">连接中...</span>
+      <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer" class="attribution-link">Created with Perplexity Computer</a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <!-- Header -->
+    <header class="main-header">
+      <button class="menu-toggle" onclick="toggleSidebar()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="header-info">
+        <h1 id="view-title" class="view-title">概览</h1>
+        <span id="project-badge" class="project-badge"></span>
+      </div>
+      <div class="header-stats" id="header-stats"></div>
+    </header>
+
+    <!-- Views -->
+    <div class="view-container">
+
+      <!-- Dashboard View (Global Overview) -->
+      <div class="view active" id="view-dashboard">
+        <div class="dashboard-container">
+          <div class="dash-kpi-row" id="dash-kpis"></div>
+          <div class="dash-grid">
+            <div class="dash-card">
+              <div class="dash-card-title">项目概况</div>
+              <div class="dash-recent" id="dash-project-summary"></div>
+            </div>
+            <div class="dash-card">
+              <div class="dash-card-title">最近实验</div>
+              <div class="dash-recent" id="dash-recent-exps"></div>
+            </div>
+            <div class="dash-card dash-card-wide">
+              <div class="dash-card-title">快捷操作</div>
+              <div class="dash-actions">
+                <button class="action-card" onclick="switchView('chat')">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                  <span>开始对话</span>
+                </button>
+                <button class="action-card" onclick="switchView('projects')">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" stroke-width="1.5"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+                  <span>查看项目</span>
+                </button>
+                <button class="action-card" onclick="showNewProjectModal()">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-warning)" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span>新建项目</span>
+                </button>
+                <button class="action-card" onclick="openSSHPanel()">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="1.5"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                  <span>终端</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projects List View -->
+      <div class="view" id="view-projects">
+        <div class="projects-header">
+          <span class="projects-count" id="projects-count"></span>
+          <button class="btn-primary btn-sm" onclick="showNewProjectModal()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            新建项目
+          </button>
+        </div>
+        <div class="project-grid" id="project-grid">
+          <div class="empty-state">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-faint)" stroke-width="1.5"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+            <p>暂无项目。创建一个项目开始研究。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Detail View -->
+      <div class="view" id="view-project-detail">
+        <div class="project-detail-header">
+          <button class="btn-ghost btn-sm" onclick="backToProjectList()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            返回项目列表
+          </button>
+          <div class="project-detail-info">
+            <h2 id="project-detail-name"></h2>
+            <span class="project-detail-repo" id="project-detail-repo"></span>
+            <span class="project-detail-desc" id="project-detail-desc"></span>
+          </div>
+        </div>
+        <div class="project-sub-tabs">
+          <button class="tab active" data-ptab="experiments" onclick="switchProjectTab('experiments', this)">实验</button>
+          <button class="tab" data-ptab="papers" onclick="switchProjectTab('papers', this)">论文</button>
+          <button class="tab" data-ptab="memory" onclick="switchProjectTab('memory', this)">记忆</button>
+          <button class="tab" data-ptab="code" onclick="switchProjectTab('code', this)">代码分析</button>
+        </div>
+        <div class="project-sub-content">
+          <!-- Sub: Experiments -->
+          <div class="project-sub active" id="psub-experiments">
+            <div class="queue-header">
+              <div class="queue-tabs">
+                <button class="tab active" data-filter="all" onclick="filterExperiments('all', this)">全部</button>
+                <button class="tab" data-filter="running" onclick="filterExperiments('running', this)">运行中</button>
+                <button class="tab" data-filter="queued" onclick="filterExperiments('queued', this)">排队中</button>
+                <button class="tab" data-filter="completed" onclick="filterExperiments('completed', this)">已完成</button>
+              </div>
+              <div class="queue-actions">
+                <button class="btn-ghost btn-sm" id="compare-btn" onclick="openCompareModal()" style="display:none;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                  对比实验
+                </button>
+                <button class="btn-primary btn-sm" onclick="showNewExperimentModal()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  新实验
+                </button>
+              </div>
+            </div>
+            <div class="experiment-list" id="experiment-list">
+              <div class="empty-state">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-faint)" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                <p>暂无实验。创建一个新实验开始研究。</p>
+              </div>
+            </div>
+          </div>
+          <!-- Sub: Papers -->
+          <div class="project-sub" id="psub-papers">
+            <div class="papers-header">
+              <div class="papers-search-wrap">
+                <input type="text" id="paper-search-input" class="form-input" placeholder="搜索论文关键词..." onkeydown="if(event.key==='Enter')searchPapersUI()">
+                <button class="btn-primary btn-sm" onclick="searchPapersUI()">搜索</button>
+              </div>
+              <div class="papers-count" id="papers-count"></div>
+            </div>
+            <div class="papers-list" id="papers-list">
+              <div class="empty-state">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-faint)" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                <p>搜索并收录与项目相关的论文。</p>
+              </div>
+            </div>
+          </div>
+          <!-- Sub: Memory -->
+          <div class="project-sub" id="psub-memory">
+            <div class="memory-header">
+              <div class="memory-search-wrap">
+                <input type="text" id="memory-search-input" class="form-input" placeholder="语义搜索记忆..." onkeydown="if(event.key==='Enter')searchMemoriesUI()">
+                <button class="btn-ghost btn-sm" onclick="searchMemoriesUI()">搜索</button>
+                <button class="btn-ghost btn-sm" onclick="reindexMemories()" title="重建向量索引">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+                </button>
+              </div>
+              <div class="memory-actions">
+                <div class="memory-stats" id="memory-stats"></div>
+                <button class="btn-primary btn-sm" onclick="showAddMemoryModal()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  添加
+                </button>
+              </div>
+            </div>
+            <div class="memory-list" id="memory-list">
+              <div class="empty-state">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-faint)" stroke-width="1.5"><path d="M12 2a7 7 0 017 7c0 5.25-7 13-7 13S5 14.25 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                <p>暂无记忆。对话和实验过程中会自动积累。</p>
+              </div>
+            </div>
+          </div>
+          <!-- Sub: Code Analysis -->
+          <div class="project-sub" id="psub-code">
+            <div class="code-analysis-inline" id="code-analysis-inline">
+              <button class="btn-primary btn-sm" onclick="triggerGitHubAnalysis()" id="btn-analyze-code">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+                开始分析代码
+              </button>
+              <div id="code-analysis-result" class="code-analysis-body"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat View -->
+      <div class="view" id="view-chat">
+        <div class="chat-layout">
+          <div class="chat-sessions-panel" id="sessions-panel">
+            <div class="sessions-header">
+              <span>会话列表</span>
+              <button class="btn-icon-sm" onclick="startNewSession()" title="新会话">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+            <div class="sessions-list" id="sessions-list"></div>
+          </div>
+          <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+              <div class="chat-welcome">
+                <div class="welcome-icon">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                </div>
+                <h2>欢迎使用 LabOS</h2>
+                <p>选择或创建一个项目，开始对话。</p>
+                <div class="welcome-hints">
+                  <button class="hint-chip hint-chip-code" onclick="insertHintWithType('分析这个项目的核心代码架构', 'code')">
+                    <span class="chip-icon">💻</span>代码分析
+                  </button>
+                  <button class="hint-chip hint-chip-paper" onclick="insertHintWithType('调研记忆增强RL领域的最新进展', 'paper')">
+                    <span class="chip-icon">📄</span>论文调研
+                  </button>
+                  <button class="hint-chip hint-chip-experiment" onclick="insertHintWithType('设计下一组消融实验方案', 'experiment')">
+                    <span class="chip-icon">🧪</span>实验设计
+                  </button>
+                  <button class="hint-chip hint-chip-general" onclick="insertHintWithType('总结最近的研究进展和下一步计划', 'general')">
+                    <span class="chip-icon">💬</span>通用对话
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="chat-input-area">
+              <div class="input-wrap">
+                <textarea id="chat-input" class="chat-input" placeholder="输入研究想法、问题或指令..." rows="1" onkeydown="handleChatKeydown(event)"></textarea>
+                <button class="send-btn" id="send-btn" onclick="sendMessage()">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+              </div>
+              <div class="input-info">
+                <span id="llm-status" class="llm-badge">LLM 未配置</span>
+                <span class="session-info" id="session-info"></span>
+                <div class="chat-task-type" id="chat-task-type">
+                  <span class="task-type-label">模式:</span>
+                  <select id="chat-task-select" class="task-type-select" onchange="onChatTaskTypeChange(this.value)">
+                    <option value="general">通用</option>
+                    <option value="code">代码</option>
+                    <option value="paper">论文</option>
+                    <option value="experiment">实验</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- (Queue/Papers/Memory views removed — now inside project detail) -->
+
+      <!-- Settings View -->
+      <div class="view" id="view-settings">
+        <div class="settings-container">
+          <div class="settings-section">
+            <h3 class="settings-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              LLM 配置档
+            </h3>
+            <p class="settings-desc">为不同任务类型配置独立的LLM（通用对话、代码分析、论文调研、实验设计）</p>
+            <div id="llm-profiles-list"></div>
+            <div class="form-actions">
+              <button class="btn-primary btn-sm" onclick="showAddProfileModal()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                添加配置
+              </button>
+            </div>
+            <details class="legacy-config-details">
+              <summary>旧版LLM配置（兼容）</summary>
+              <div class="form-group">
+                <label>API 地址</label>
+                <input type="text" id="cfg-llm-url" class="form-input" placeholder="https://api.deepseek.com">
+              </div>
+              <div class="form-group">
+                <label>API Key</label>
+                <input type="password" id="cfg-llm-key" class="form-input" placeholder="sk-...">
+              </div>
+              <div class="form-group">
+                <label>模型</label>
+                <input type="text" id="cfg-llm-model" class="form-input" placeholder="gpt-4o-mini / deepseek-chat">
+              </div>
+              <div class="form-actions">
+                <button class="btn-primary btn-sm" onclick="saveSettings()">保存</button>
+                <button class="btn-ghost btn-sm" onclick="testLLM()">测试</button>
+                <span id="llm-test-result" class="test-result"></span>
+              </div>
+            </details>
+          </div>
+
+          <div class="settings-section">
+            <h3 class="settings-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              计算服务器 (AutoDL)
+            </h3>
+            <p class="settings-desc">配置 GPU 服务器用于执行训练任务</p>
+            <div class="form-group">
+              <label>SSH 地址</label>
+              <input type="text" id="cfg-ssh-host" class="form-input" placeholder="region-1.autodl.pro">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>端口</label>
+                <input type="text" id="cfg-ssh-port" class="form-input" placeholder="12345">
+              </div>
+              <div class="form-group">
+                <label>用户名</label>
+                <input type="text" id="cfg-ssh-user" class="form-input" placeholder="root">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>密码</label>
+              <input type="password" id="cfg-ssh-pass" class="form-input" placeholder="SSH 密码">
+            </div>
+            <div class="form-actions">
+              <button class="btn-primary btn-sm" onclick="saveSettings()">保存</button>
+              <button class="btn-ghost btn-sm" onclick="testSSH()">测试连接</button>
+              <span id="ssh-test-result" class="test-result"></span>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h3 class="settings-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+              Embedding 配置
+            </h3>
+            <p class="settings-desc">配置向量化模型，用于记忆语义搜索</p>
+            <div class="form-group">
+              <label>API 地址</label>
+              <input type="text" id="cfg-embed-url" class="form-input" placeholder="https://api.openai.com">
+            </div>
+            <div class="form-group">
+              <label>API Key</label>
+              <input type="password" id="cfg-embed-key" class="form-input" placeholder="sk-...">
+            </div>
+            <div class="form-group">
+              <label>模型</label>
+              <input type="text" id="cfg-embed-model" class="form-input" placeholder="text-embedding-3-small">
+            </div>
+            <div class="form-actions">
+              <button class="btn-primary btn-sm" onclick="saveSettings()">保存</button>
+              <button class="btn-ghost btn-sm" onclick="testEmbedding()">测试</button>
+              <span id="embed-test-result" class="test-result"></span>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h3 class="settings-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              实验流水线
+            </h3>
+            <p class="settings-desc">配置阶段审批机制。执行模式（模拟/真实）在启动每个实验时单独选择。</p>
+            <div class="form-group">
+              <label>阶段审批</label>
+              <select id="cfg-approval" class="form-input">
+                <option value="true">启用 — 每个阶段完成后暂停，等待审批后继续</option>
+                <option value="false">禁用 — 全自动跑完所有阶段</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>自动Debug</label>
+              <select id="cfg-auto-debug" class="form-input">
+                <option value="true">启用 — 代码执行报错后自动诊断并修复重试</option>
+                <option value="false">禁用 — 报错即停止</option>
+              </select>
+              <span class="form-hint">启用后，实验执行阶段若代码出错，系统将通过 Codex CLI 在服务器上自动诊断并修复。需确保服务器已安装 Codex CLI。</span>
+            </div>
+            <div class="form-actions">
+              <button class="btn-primary btn-sm" onclick="savePipelineSettings()">保存</button>
+              <span id="pipeline-test-result" class="test-result"></span>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h3 class="settings-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Dify 集成
+            </h3>
+            <p class="settings-desc">连接 Dify 平台工作流编排和 RAG</p>
+            <div class="form-group">
+              <label>API 地址</label>
+              <input type="text" id="cfg-dify-url" class="form-input" placeholder="https://api.dify.ai/v1">
+            </div>
+            <div class="form-group">
+              <label>API Key</label>
+              <input type="password" id="cfg-dify-key" class="form-input" placeholder="app-...">
+            </div>
+            <div class="form-actions">
+              <button class="btn-primary btn-sm" onclick="saveSettings()">保存</button>
+              <button class="btn-ghost btn-sm" onclick="testDify()">测试</button>
+              <span id="dify-test-result" class="test-result"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Experiment Detail Panel -->
+<div class="detail-panel" id="detail-panel">
+  <div class="detail-panel-content">
+    <div class="detail-header">
+      <h2 id="detail-title"></h2>
+      <button class="btn-icon" onclick="closeDetailPanel()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="pipeline-visual" id="pipeline-visual"></div>
+    <div class="approval-banner" id="approval-banner" style="display:none">
+      <div class="approval-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="approval-stage-label">阶段已完成，等待审批</span>
+      </div>
+      <div class="approval-output" id="approval-output"></div>
+      <div class="approval-comment-wrap">
+        <textarea id="approval-comment" class="form-input" placeholder="审批意见（可选）..." rows="2"></textarea>
+      </div>
+      <div class="approval-actions">
+        <button class="btn-primary btn-sm" onclick="approveStage('approve')">批准→下一阶段</button>
+        <button class="btn-warning btn-sm" onclick="approveStage('revise')">修改重跑</button>
+        <button class="btn-danger btn-sm" onclick="approveStage('reject')">拒绝终止</button>
+      </div>
+    </div>
+    <div class="detail-tabs">
+      <button class="tab active" onclick="switchDetailTab('logs', this)">日志</button>
+      <button class="tab" onclick="switchDetailTab('report', this)">报告</button>
+      <button class="tab" onclick="switchDetailTab('feedback', this)">反馈</button>
+    </div>
+    <div class="detail-tab-content">
+      <div class="detail-tab active" id="dtab-logs">
+        <div class="log-stream" id="detail-logs"></div>
+      </div>
+      <div class="detail-tab" id="dtab-report">
+        <div class="reports-timeline" id="reports-timeline">
+          <div class="empty-state small">暂无报告</div>
+        </div>
+      </div>
+      <div class="detail-tab" id="dtab-feedback">
+        <div class="feedback-area">
+          <div class="feedback-history" id="feedback-history"></div>
+          <div class="feedback-input-wrap">
+            <textarea id="feedback-input" class="form-input" placeholder="对这个实验的反馈..." rows="3"></textarea>
+            <button class="btn-primary btn-sm" onclick="submitFeedback()">提交</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Compare Panel -->
+<div class="detail-panel" id="compare-panel">
+  <div class="detail-panel-content">
+    <div class="detail-header">
+      <h2>实验对比</h2>
+      <button class="btn-icon" onclick="closeComparePanel()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="compare-content" id="compare-content">
+      <div class="empty-state small">选择实验后点击"对比"</div>
+    </div>
+  </div>
+</div>
+
+<!-- Code Analysis Panel -->
+<div class="detail-panel" id="code-panel">
+  <div class="detail-panel-content">
+    <div class="detail-header">
+      <h2>代码分析</h2>
+      <button class="btn-icon" onclick="closeCodePanel()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="code-analysis-content" id="code-analysis-content">
+      <div class="empty-state small">正在分析...</div>
+    </div>
+  </div>
+</div>
+
+<!-- SSH Terminal Panel -->
+<div class="detail-panel" id="ssh-panel">
+  <div class="detail-panel-content">
+    <div class="detail-header">
+      <h2>SSH 终端</h2>
+      <div class="ssh-header-actions">
+        <span class="ssh-status" id="ssh-status">未连接</span>
+        <button class="btn-icon" onclick="closeSSHPanel()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="ssh-terminal" id="ssh-terminal">
+      <div class="ssh-output" id="ssh-output">
+        <div class="ssh-welcome">LabOS SSH 终端 — 连接到 AutoDL 服务器执行命令</div>
+      </div>
+      <div class="ssh-input-area">
+        <span class="ssh-prompt">$</span>
+        <input type="text" id="ssh-command-input" class="ssh-input" placeholder="输入命令..." onkeydown="if(event.key==='Enter')executeSSHCommand()">
+        <button class="btn-primary btn-sm" onclick="executeSSHCommand()">执行</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modal-title"></h3>
+      <button class="btn-icon" onclick="closeModal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script src="./app.js"></script>
+</body>
+</html>

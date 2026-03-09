@@ -41,3 +41,5 @@ skills/
 # Temp
 tool_calls/
 cron_tracking/
+__pycache__/
+assets/
