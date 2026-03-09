@@ -1,0 +1,43 @@
+# Database
+*.db
+*.db-journal
+*.sqlite
+
+# Logs
+*.log
+server.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment / Secrets
+.env
+.env.*
+
+# Skill files (workspace artifacts)
+skills/
+
+# Temp
+tool_calls/
+cron_tracking/
