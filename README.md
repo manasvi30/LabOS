@@ -3,11 +3,12 @@
   <p align="center"><b>Fully Automated Research System — 全自动科研实验平台</b></p>
   <p align="center">
     <a href="#features">Features</a> •
-    <a href="#architecture">Architecture</a> •
+    <a href="#screenshots">Screenshots</a> •
     <a href="#quick-start">Quick Start</a> •
-    <a href="#configuration">Configuration</a> •
+    <a href="#architecture">Architecture</a> •
+    <a href="#open-core-model">Open Core</a> •
     <a href="#contributing">Contributing</a> •
-    <a href="#license">License</a>
+    <a href="#support">Support</a>
   </p>
   <p align="center">
     <img src="https://img.shields.io/badge/license-AGPL--3.0-blue.svg" alt="License">
@@ -35,6 +36,19 @@
 
 ---
 
+## Screenshots
+
+### Project Management | 项目管理
+![Projects](docs/screenshot-projects.jpg)
+
+### Experiment Pipeline | 实验流水线
+![Experiment Detail](docs/screenshot-experiment.jpg)
+
+### Dashboard | 概览面板
+![Dashboard](docs/screenshot-dashboard.png)
+
+---
+
 ## Features
 
 ### 🧪 Four-Stage Research Pipeline
@@ -43,30 +57,56 @@
 ```
 Each stage produces reports and supports human review / approval gates.
 
-### 💬 Chat-Driven Interface
+每个阶段都会生成报告（调研报告 → 分析报告 → 实验报告 → 论文），并支持人工审批。
+
+### 💬 Chat-Driven Interface | 对话驱动
 - Conversational AI assistant for research brainstorming
 - Create projects directly from chat conversations
 - Multiple LLM profiles: general / code / paper / experiment
 - Configurable LLM backends (bring your own API key & endpoint)
 
-### 🖥️ Remote Experiment Execution
+### 🖥️ Remote Experiment Execution | 远程实验执行
 - SSH into GPU servers (AutoDL, etc.) for experiment runs
 - Real-time log streaming via SSE (Server-Sent Events)
 - Codex CLI integration with full-auto mode and JSONL streaming
 - Live experiment monitoring from the web dashboard
 
-### 📊 Unified Dashboard
+### 📊 Unified Dashboard | 统一管理
 - Project management with experiment tracking
 - Memory system for cross-experiment knowledge persistence
 - Paper & findings library
-- Per-stage reports (research report → analysis report → experiment report)
+- Per-stage reports (research → analysis → experiment → paper)
 
-### ⚙️ Fully Configurable
+### ⚙️ Fully Configurable | 完全可配置
 - Multiple LLM configurations (different models for different tasks)
 - Custom API endpoints (OpenAI-compatible)
 - SSH server settings
 - Embedding model configuration
 - All settings exposed via web UI — no code changes needed
+
+---
+
+## Quick Start
+
+### Prerequisites
+- Python 3.10+
+
+### Run
+
+```bash
+git clone https://github.com/YUANXICHE98/LabOS.git
+cd LabOS
+pip install fastapi uvicorn paramiko httpx
+python api_server.py
+```
+
+Open `http://localhost:8000` in your browser.
+
+### First Steps
+1. Go to **Settings** → configure your LLM API endpoint and key
+2. (Optional) Configure SSH for remote experiment execution
+3. Go to **Chat** → start a conversation → create a project from chat
+4. Or go to **Projects** → create a project manually → run experiments
 
 ---
 
@@ -100,66 +140,46 @@ Each stage produces reports and supports human review / approval gates.
 
 ---
 
-## Quick Start
+## Open Core Model | 开源核心 + 付费增值
 
-### Prerequisites
-- Python 3.10+
-- `pip install fastapi uvicorn paramiko httpx`
+LabOS follows an **Open Core** model:
 
-### Run
+### 🆓 Free & Open Source (this repo)
+Everything in this repository is free under AGPL-3.0:
+- Full research pipeline (ideation → planning → experiment → writing)
+- Chat-driven interface
+- Multi-project management
+- LLM configuration & profiles
+- Dashboard & memory system
+- Basic experiment execution
 
-```bash
-git clone https://github.com/YUANXICHE98/LabOS.git
-cd LabOS
-pip install fastapi uvicorn paramiko httpx
-python api_server.py
-```
+### 💎 Premium (coming soon)
+- **Skill Library** — Curated research methodologies, proven experiment paths, and best practices from real research projects. Think of it as a marketplace for "what worked" in different research domains.
+- **Advanced Integrations** — Pre-built connectors for cloud GPU platforms, HPC clusters, and specialized hardware
+- **Priority Support** — Direct access to the development team
 
-Open `http://localhost:8000` in your browser.
+> **Philosophy:** The platform itself will always be open. We believe the real value is in **curated knowledge and methodology** — the proven research paths and techniques that save weeks of trial and error. This is what the premium tier offers.
 
-### First Steps
-1. Go to **Settings** → configure your LLM API endpoint and key
-2. (Optional) Configure SSH for remote experiment execution
-3. Go to **Chat** → start a conversation → create a project from chat
-4. Or go to **Projects** → create a project manually → run experiments
-
----
-
-## Configuration
-
-All configuration is done through the web UI under **Settings**:
-
-| Config | Description |
-|--------|-------------|
-| **LLM API** | OpenAI-compatible endpoint URL + API key + model name |
-| **LLM Profiles** | Separate configs for general / code / paper / experiment tasks |
-| **SSH Server** | Host, port, username, key for remote GPU servers |
-| **Embedding** | Embedding model endpoint for memory retrieval |
-
-You can use any OpenAI-compatible API: OpenAI, DeepSeek, Claude (via adapter), local models (vLLM, Ollama), etc.
+> **理念：** 平台本身永远开源。真正的价值在于**经过验证的研究方法论和最佳实践**——那些节省数周试错时间的成熟路径。这是付费增值的核心。
 
 ---
 
 ## Contributing
 
-We welcome contributions! LabOS is in active development and there's plenty to work on:
+We welcome contributions! LabOS is in active development and there's plenty to work on.
+
+See **[CONTRIBUTING.md](./CONTRIBUTING.md)** for development setup and guidelines.
 
 ### Areas We Need Help With
-- 🧠 **Memory System** — better retrieval algorithms, knowledge graph integration
-- 🔬 **Pipeline Stages** — more experiment templates, domain-specific pipelines
+- 🧠 **Memory System** — better retrieval, knowledge graph integration
+- 🔬 **Pipeline** — more experiment templates, domain-specific stages
 - 📝 **Paper Writing** — LaTeX generation, citation management
 - 🌐 **Frontend** — UI/UX improvements, visualization
-- 🔌 **Integrations** — more LLM providers, cloud GPU platforms, arXiv API
+- 🔌 **Integrations** — more LLM providers, cloud GPU platforms
 - 📖 **Documentation** — tutorials, examples, translations
+- 🌍 **i18n** — multi-language UI support
 
-### How to Contribute
-1. Fork this repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-All contributions must be compatible with the AGPL-3.0 license. By contributing, you agree that your contributions will be licensed under the same license.
+Browse [open issues](https://github.com/YUANXICHE98/LabOS/issues) for specific tasks — many are tagged `good first issue`.
 
 ---
 
@@ -171,23 +191,43 @@ All contributions must be compatible with the AGPL-3.0 license. By contributing,
 - [x] Multiple LLM profile configuration
 - [x] SSH remote experiment execution
 - [ ] arXiv paper search integration
-- [ ] Experiment result visualization (charts, plots)
+- [ ] Experiment result visualization (charts & plots)
 - [ ] Multi-user support
 - [ ] Docker deployment
 - [ ] Plugin system for custom pipeline stages
 - [ ] Knowledge graph memory backend
+- [ ] Skill library & marketplace
+
+---
+
+## Support the Project | 支持项目
+
+If LabOS helps your research, consider supporting its development:
+
+- ⭐ **Star this repo** — it helps others discover LabOS
+- 🍴 **Fork & contribute** — code, docs, or translations
+- 💰 **Sponsor** — help sustain development
+
+### Crypto | 加密货币
+<!-- Add your wallet addresses below -->
+<!-- ETH: `0x...` -->
+<!-- BTC: `bc1...` -->
+
+### WeChat / Alipay | 微信 / 支付宝
+<!-- Add QR code images: ![WeChat](docs/wechat-qr.png) -->
+
+> To add your donation info: edit this section and push, or send me your wallet addresses / QR code images.
 
 ---
 
 ## License
 
-This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.
+**GNU Affero General Public License v3.0 (AGPL-3.0)**
 
-This means:
-- ✅ You can use, modify, and distribute this software freely
-- ✅ You can use it for commercial purposes
-- ⚠️ Any modified version **must** also be open-sourced under AGPL-3.0
-- ⚠️ If you run a modified version as a network service, you **must** make the source code available to users
+- ✅ Free to use, modify, and distribute
+- ✅ Commercial use allowed
+- ⚠️ Modified versions **must** be open-sourced under AGPL-3.0
+- ⚠️ Network services using modified code **must** provide source to users
 - ⚠️ All derivative works must reference this upstream repository
 
 See [LICENSE](./LICENSE) for the full text.
